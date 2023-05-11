@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+ln -sf AArch64/{*.ml{,i},libmincaml.S} .
+cd test; ln -sf AArch64/{,too}manyargs.ml .; cd ..
+cd shootout; ln -sf AArch64/Makefile .; cd ..
+cd bytemark; ln -sf AArch64/Makefile .; cd ..
+cd min-rt; ln -sf ../AArch64/globals.s .; cd ..
+
