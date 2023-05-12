@@ -62,13 +62,16 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprim
   (* 末尾でなかったら計算結果をdestにセット (caml2html: emit_nontail) *)
   | NonTail(_), Nop -> ()
   | NonTail(x), Li(i) when -32768 <= i && i < 32768 -> Printf.fprintf oc "\tmov %s, %d\n" (reg x) i
-  (* TODO: こちらは後で実装する *)
   | NonTail(x), Li(i) ->
-      let n = i lsr 16 in
-      let m = i lxor (n lsl 16) in
-      let r = reg x in
-      Printf.fprintf oc "\tlis\t%s, %d\n" r n;
-      Printf.fprintf oc "\tori\t%s, %s, %d\n" r r m
+      (* 16ビットずつに区切って定数を読み込む *)
+      let a = i land 0xffff in
+      let b = (i lsr 16) land 0xffff in
+      let c = (i lsr 32) land 0xffff in
+      let d = (i lsr 48) land 0xffff in
+      Printf.fprintf oc "\tmov %s, %d\n" (reg x) a;
+      Printf.fprintf oc "\tmovk %s, %d, lsl 16\n" (reg x) b;
+      Printf.fprintf oc "\tmovk %s, %d, lsl 32\n" (reg x) c;
+      Printf.fprintf oc "\tmovk %s, %d, lsl 48\n" (reg x) d
   | NonTail(x), FLi(Id.L(l)) ->
       let s = load_label (reg reg_tmp) l in
       Printf.fprintf oc "%s\tlfd\t%s, 0(%s)\n" s (reg x) (reg reg_tmp)
@@ -76,7 +79,7 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprim
       let s = load_label x y in
       Printf.fprintf oc "%s" s
   | NonTail(x), Mr(y) when x = y -> ()
-  | NonTail(x), Mr(y) -> Printf.fprintf oc "\tmr\t%s, %s\n" (reg x) (reg y)
+  | NonTail(x), Mr(y) -> Printf.fprintf oc "\tmov %s, %s\n" (reg x) (reg y)
   | NonTail(x), Neg(y) -> Printf.fprintf oc "\tneg\t%s, %s\n" (reg x) (reg y)
   | NonTail(x), Add(y, V(z)) -> Printf.fprintf oc "\tadd\t%s, %s, %s\n" (reg x) (reg y) (reg z)
   | NonTail(x), Add(y, C(z)) -> Printf.fprintf oc "\tadd %s, %s, %d\n" (reg x) (reg y) z
