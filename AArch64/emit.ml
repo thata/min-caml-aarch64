@@ -212,7 +212,7 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprim
       Printf.fprintf oc "\t@@@subi\t%s, %s, %d\n" (reg reg_sp) (reg reg_sp) ss;
       Printf.fprintf oc "\tlwz\t%s, %d(%s)\n" (reg reg_tmp) (ss - 4) (reg reg_sp); *)
       if List.mem a allregs && a <> regs.(0) then
-        Printf.fprintf oc "\tmr\t%s, %s\n" (reg a) (reg regs.(0))
+        Printf.fprintf oc "\tmov %s, %s\n" (reg a) (reg regs.(0))
       else if List.mem a allfregs && a <> fregs.(0) then
         Printf.fprintf oc "\tfmr\t%s, %s\n" (reg a) (reg fregs.(0));
       (* lrをスタックから復元 *)
