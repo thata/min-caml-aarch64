@@ -43,20 +43,22 @@ type prog = Prog of (Id.l * float) list * fundef list * t
 let fletd(x, e1, e2) = Let((x, Type.Float), e1, e2)
 let seq(e1, e2) = Let((Id.gentmp Type.Unit, Type.Unit), e1, e2)
 
+(* x29(fp) と x30(lr) は除外 *)
+(* x28 は sp として、x27 は hp として、x26 は tmp として利用するため除外 *)
+
 let regs = (* Array.init 27 (fun i -> Printf.sprintf "_R_%d" i) *)
-  [| "%r2"; "%r5"; "%r6"; "%r7"; "%r8"; "%r9"; "%r10";
-     "%r11"; "%r12"; "%r13"; "%r14"; "%r15"; "%r16"; "%r17"; "%r18";
-     "%r19"; "%r20"; "%r21"; "%r22"; "%r23"; "%r24"; "%r25"; "%r26";
-     "%r27"; "%r28"; "%r29"; "%r30" |]
+  [| "%x0"; "%x1"; "%x2"; "%x3"; "%x4"; "%x5"; "%x6"; "%x7"; "%x8"; "%x9"; "%x10";
+  "%x11"; "%x12"; "%x13"; "%x14"; "%x15"; "%x16"; "%x17"; "%x18"; "%x19"; "%x20";
+  "%x21"; "%x22"; "%x23"; "%x24"; "%x25" |]
 let fregs = Array.init 32 (fun i -> Printf.sprintf "%%f%d" i)
 let allregs = Array.to_list regs
 let allfregs = Array.to_list fregs
 let reg_cl = regs.(Array.length regs - 1) (* closure address (caml2html: sparcasm_regcl) *)
 let reg_sw = regs.(Array.length regs - 2) (* temporary for swap *)
 let reg_fsw = fregs.(Array.length fregs - 1) (* temporary for swap *)
-let reg_sp = "%r3" (* stack pointer *)
-let reg_hp = "%r4" (* heap pointer (caml2html: sparcasm_reghp) *)
-let reg_tmp = "%r31" (* [XX] ad hoc *)
+let reg_sp = "%x28" (* stack pointer *)
+let reg_hp = "%x27" (* heap pointer (caml2html: sparcasm_reghp) *)
+let reg_tmp = "%x26" (* [XX] ad hoc *)
 let is_reg x = (x.[0] = '%')
 
 (* super-tenuki *)
