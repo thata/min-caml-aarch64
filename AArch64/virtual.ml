@@ -29,7 +29,8 @@ let expand xts ini addf addi =
       let offset = align offset in
       (offset + 8, addf x offset acc))
     (fun (offset, acc) x t ->
-      (offset + 4, addi x t offset acc))
+      (* NOTE: 64ビットなので4バイトから8バイトにする *)
+      (offset + 8, addi x t offset acc))
 
 let rec g env = function (* 式の仮想マシンコード生成 (caml2html: virtual_g) *)
   | Closure.Unit -> Ans(Nop)
@@ -78,7 +79,8 @@ let rec g env = function (* 式の仮想マシンコード生成 (caml2html: vir
       let offset, store_fv =
         expand
           (List.map (fun y -> (y, M.find y env)) ys)
-          (4, e2')
+          (* NOTE: 64ビットなので4バイトから8バイトにする *)
+          (8, e2')
           (fun y offset store_fv -> seq(Stfd(y, x, C(offset)), store_fv))
           (fun y _ offset store_fv -> seq(Stw(y, x, C(offset)), store_fv)) in
       Let((x, t), Mr(reg_hp),
@@ -147,7 +149,8 @@ let h { Closure.name = (Id.L(x), t); Closure.args = yts; Closure.formal_fv = zts
   let (offset, load) =
     expand
       zts
-      (4, g (M.add x t (M.add_list yts (M.add_list zts M.empty))) e)
+      (* NOTE: 64ビットなので4バイトから8バイトにする *)
+      (8, g (M.add x t (M.add_list yts (M.add_list zts M.empty))) e)
       (fun z offset load -> fletd(z, Lfd(x, C(offset)), load))
       (fun z t offset load -> Let((z, t), Lwz(x, C(offset)), load)) in
   match t with
