@@ -124,10 +124,12 @@ let rec g env = function (* 式の仮想マシンコード生成 (caml2html: vir
       (match M.find x env with
       | Type.Array(Type.Unit) -> Ans(Nop)
       | Type.Array(Type.Float) ->
+          (* float の Array は1要素で8バイトなので、渡されたインデックス値を8倍したものをオフセットとする *)
           Let((offset, Type.Int), Slw(y, C(3)),
               Ans(Lfd(x, V(offset))))
       | Type.Array(_) ->
-          Let((offset, Type.Int), Slw(y, C(2)),
+          (* int の Array は1要素で8バイトなので、渡されたインデックス値を8倍したものをオフセットとする *)
+          Let((offset, Type.Int), Slw(y, C(3)),
               Ans(Lwz(x, V(offset))))
       | _ -> assert false)
   | Closure.Put(x, y, z) ->
@@ -135,10 +137,12 @@ let rec g env = function (* 式の仮想マシンコード生成 (caml2html: vir
       (match M.find x env with
       | Type.Array(Type.Unit) -> Ans(Nop)
       | Type.Array(Type.Float) ->
+          (* float の Array は1要素で8バイトなので、渡されたインデックス値を8倍したものをオフセットとする *)
           Let((offset, Type.Int), Slw(y, C(3)),
               Ans(Stfd(z, x, V(offset))))
       | Type.Array(_) ->
-          Let((offset, Type.Int), Slw(y, C(2)),
+          (* int の Array は1要素で8バイトなので、渡されたインデックス値を8倍したものをオフセットとする *)
+          Let((offset, Type.Int), Slw(y, C(3)),
               Ans(Stw(z, x, V(offset))))
       | _ -> assert false)
   | Closure.ExtArray(Id.L(x)) -> Ans(SetL(Id.L("min_caml_" ^ x)))
