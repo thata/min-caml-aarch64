@@ -86,6 +86,20 @@ LBB2_4:
 	ret
 	.cfi_endproc
                                         ; -- End function
+	.globl	min_caml_truncate               ; -- Begin function min_caml_truncate
+	.p2align	2
+min_caml_truncate:                      ; @"\01min_caml_truncate"
+	.cfi_startproc
+; %bb.0:
+	sub	sp, sp, #16
+	.cfi_def_cfa_offset 16
+	str	d0, [sp, #8]
+	ldr	d0, [sp, #8]
+	fcvtzs	x0, d0
+	add	sp, sp, #16
+	ret
+	.cfi_endproc
+                                        ; -- End function
 	.section	__TEXT,__cstring,cstring_literals
 l_.str:                                 ; @.str
 	.asciz	"%ld"

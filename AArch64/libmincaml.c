@@ -4,6 +4,7 @@
 void min_caml_print_int(long n) asm("min_caml_print_int");
 void min_caml_print_newline() asm("min_caml_print_newline");
 long* min_caml_create_array(long number_of_element, long init_value) asm("min_caml_create_array");
+long min_caml_truncate() asm("min_caml_truncate");
 
 void min_caml_print_int(long n) {
   printf("%ld", n);
@@ -32,4 +33,9 @@ long* min_caml_create_array(long number_of_element, long init_value) {
   asm volatile ("mov x27, %0" : : "r"(heap_ptr));
 
   return array_ptr;
+}
+
+// truncate
+long min_caml_truncate(double d) {
+  return (long)d;
 }

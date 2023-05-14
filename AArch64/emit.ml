@@ -71,8 +71,9 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprim
       Printf.fprintf oc "\tmovk %s, %d, lsl 32\n" (reg x) c;
       Printf.fprintf oc "\tmovk %s, %d, lsl 48\n" (reg x) d
   | NonTail(x), FLi(Id.L(l)) ->
-      let s = load_label (reg reg_tmp) l in
-      Printf.fprintf oc "%s\tlfd\t%s, 0(%s)\n" s (reg x) (reg reg_tmp)
+      (* ラベル l に格納された浮動小数点数をレジスタへロードする *)
+      Printf.fprintf oc "\tadrp %s, %s@PAGE\n" (reg reg_tmp) l;
+      Printf.fprintf oc "\tldr %s, [%s, %s@PAGEOFF]\n" (reg x) (reg reg_tmp) l
   | NonTail(x), SetL(Id.L(y)) ->
       let s = load_label x y in
       Printf.fprintf oc "%s" s
