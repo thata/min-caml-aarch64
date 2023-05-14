@@ -1,6 +1,8 @@
 *.cmo
 *.cmi
+*.o
 min-caml
 min-caml.top
 ._d
 ._bcdi
+*.dSYM
