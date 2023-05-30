@@ -86,6 +86,52 @@ LBB2_4:
 	ret
 	.cfi_endproc
                                         ; -- End function
+	.globl	min_caml_create_float_array     ; -- Begin function min_caml_create_float_array
+	.p2align	2
+min_caml_create_float_array:            ; @"\01min_caml_create_float_array"
+	.cfi_startproc
+; %bb.0:
+	sub	sp, sp, #48
+	.cfi_def_cfa_offset 48
+	str	x0, [sp, #40]
+	str	d0, [sp, #32]
+	; InlineAsm Start
+	mov	x8, x27
+	; InlineAsm End
+	str	x8, [sp, #24]
+	ldr	x8, [sp, #24]
+	str	x8, [sp, #16]
+	str	xzr, [sp, #8]
+	b	LBB3_1
+LBB3_1:                                 ; =>This Inner Loop Header: Depth=1
+	ldr	x8, [sp, #8]
+	ldr	x9, [sp, #40]
+	subs	x8, x8, x9
+	b.ge	LBB3_4
+	b	LBB3_2
+LBB3_2:                                 ;   in Loop: Header=BB3_1 Depth=1
+	ldr	d0, [sp, #32]
+	ldr	x8, [sp, #24]
+	str	d0, [x8]
+	ldr	x8, [sp, #24]
+	add	x8, x8, #8
+	str	x8, [sp, #24]
+	b	LBB3_3
+LBB3_3:                                 ;   in Loop: Header=BB3_1 Depth=1
+	ldr	x8, [sp, #8]
+	add	x8, x8, #1
+	str	x8, [sp, #8]
+	b	LBB3_1
+LBB3_4:
+	ldr	x8, [sp, #24]
+	; InlineAsm Start
+	mov	x27, x8
+	; InlineAsm End
+	ldr	x0, [sp, #16]
+	add	sp, sp, #48
+	ret
+	.cfi_endproc
+                                        ; -- End function
 	.globl	min_caml_truncate               ; -- Begin function min_caml_truncate
 	.p2align	2
 min_caml_truncate:                      ; @"\01min_caml_truncate"
