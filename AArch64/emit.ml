@@ -86,9 +86,9 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprim
   | NonTail(x), Sub(y, C(z)) -> Printf.fprintf oc "\tsub %s, %s, %d\n" (reg x) (reg y) z
   | NonTail(x), Slw(y, V(z)) -> Printf.fprintf oc "\tslw\t%s, %s, %s\n" (reg x) (reg y) (reg z)
   | NonTail(x), Slw(y, C(z)) -> Printf.fprintf oc "\tlsl %s, %s, %d\n" (reg x) (reg y) z
-  | NonTail(x), Lwz(y, V(z)) -> Printf.fprintf oc "\tlwzx\t%s, %s, %s\n" (reg x) (reg y) (reg z)
+  | NonTail(x), Lwz(y, V(z)) -> Printf.fprintf oc "\tldr %s, [%s, %s]\n" (reg x) (reg y) (reg z)
   | NonTail(x), Lwz(y, C(z)) -> Printf.fprintf oc "\tldr %s, [%s, %d]\n" (reg x) (reg y) z
-  | NonTail(_), Stw(x, y, V(z)) -> Printf.fprintf oc "\tstwx\t%s, %s, %s\n" (reg x) (reg y) (reg z)
+  | NonTail(_), Stw(x, y, V(z)) -> Printf.fprintf oc "\tstr %s, [%s, %s]\n" (reg x) (reg y) (reg z)
   | NonTail(_), Stw(x, y, C(z)) -> Printf.fprintf oc "\tstr %s, [%s, %d]\n" (reg x) (reg y) z
   | NonTail(x), FMr(y) when x = y -> ()
   | NonTail(x), FMr(y) -> Printf.fprintf oc "\tfmr\t%s, %s\n" (reg x) (reg y)
@@ -99,7 +99,7 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprim
   | NonTail(x), FDiv(y, z) -> Printf.fprintf oc "\tfdiv\t%s, %s, %s\n" (reg x) (reg y) (reg z)
   | NonTail(x), Lfd(y, V(z)) -> Printf.fprintf oc "\tldr %s, [%s, %s]\n" (reg x) (reg y) (reg z)
   | NonTail(x), Lfd(y, C(z)) -> Printf.fprintf oc "\tldr %s, [%s, %d]\n" (reg x) (reg y) z
-  | NonTail(_), Stfd(x, y, V(z)) -> Printf.fprintf oc "\tstfdx\t%s, %s, %s\n" (reg x) (reg y) (reg z)
+  | NonTail(_), Stfd(x, y, V(z)) -> Printf.fprintf oc "\tstr %s, [%s, %s]\n" (reg x) (reg y) (reg z)
   | NonTail(_), Stfd(x, y, C(z)) -> Printf.fprintf oc "\tstr %s, [%s, %d]\n" (reg x) (reg y) z
   | NonTail(_), Comment(s) -> Printf.fprintf oc "#\t%s\n" s
   (* 退避の仮想命令の実装 (caml2html: emit_save) *)
