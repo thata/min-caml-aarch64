@@ -31,10 +31,6 @@ let reg r =
   then String.sub r 1 (String.length r - 1)
   else r
 
-let load_label r label =
-  let r' = reg r in
-  Printf.sprintf "\tadr %s, %s\n" r' label
-
 (* 関数呼び出しのために引数を並べ替える(register shuffling) (caml2html: emit_shuffle) *)
 let rec shuffle sw xys =
   (* remove identical moves *)
@@ -75,8 +71,8 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprim
       Printf.fprintf oc "\tadrp %s, %s@PAGE\n" (reg reg_tmp) l;
       Printf.fprintf oc "\tldr %s, [%s, %s@PAGEOFF]\n" (reg x) (reg reg_tmp) l
   | NonTail(x), SetL(Id.L(y)) ->
-      let s = load_label x y in
-      Printf.fprintf oc "%s" s
+      Printf.fprintf oc "\tadrp %s, %s@PAGE\n" (reg x) y;
+      Printf.fprintf oc "\tadd %s, %s, %s@PAGEOFF\n" (reg x) (reg x) y
   | NonTail(x), Mr(y) when x = y -> ()
   | NonTail(x), Mr(y) -> Printf.fprintf oc "\tmov %s, %s\n" (reg x) (reg y)
   | NonTail(x), Neg(y) -> Printf.fprintf oc "\tneg\t%s, %s\n" (reg x) (reg y)
