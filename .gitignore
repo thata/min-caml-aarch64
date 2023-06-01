@@ -6,3 +6,7 @@ min-caml.top
 ._d
 ._bcdi
 *.dSYM
+test/*.s
+test/*.ans
+test/*.cmp
+test/*.res
