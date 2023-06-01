@@ -23,7 +23,7 @@ ppmdiff: ppm.ml diff.ml
 	time ./min-rt.min-caml < $< > $@.tmp
 	mv $@.tmp $@
 min-rt.min-caml: min-rt.s globals.s ../libmincaml.S ../stub.c
-	gcc -m32 -g -O2 -Wall $^ -lm -o min-rt.min-caml
+	gcc -g -O2 -Wall $^ -lm -o min-rt.min-caml
 min-rt.s: min-rt.ml ../min-caml
 	../min-caml -inline 100 min-rt
 
@@ -72,10 +72,10 @@ globals.cmx: miniMLRuntime.cmx
 globals.cmo: miniMLRuntime.cmi
 
 min-rt_b: min-rt.cmo globals.cmo miniMLRuntime.cmo
-	ocamlc -g -o min-rt_b miniMLRuntime.cmo globals.cmo min-rt.cmo 
+	ocamlc -g -o min-rt_b miniMLRuntime.cmo globals.cmo min-rt.cmo
 
 min-rt: min-rt.cmx globals.cmx miniMLRuntime.cmx
-	ocamlopt -unsafe -inline 100 -o min-rt miniMLRuntime.cmx globals.cmx min-rt.cmx 
+	ocamlopt -unsafe -inline 100 -o min-rt miniMLRuntime.cmx globals.cmx min-rt.cmx
 
 miniMLRuntime.cmi: miniMLRuntime.mli
 	ocamlc -c miniMLRuntime.mli
