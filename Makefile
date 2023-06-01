@@ -34,6 +34,10 @@ shuffle spill spill2 spill3 join-stack join-stack2 join-stack3 \
 join-reg join-reg2 non-tail-if non-tail-if2 \
 inprod inprod-rec inprod-loop matmul matmul-flat
 
+# AArch64 以外のことは考慮してない
+libmincaml.S: AArch64/libmincaml.c
+	gcc -S -o AArch64/libmincaml.S AArch64/libmincaml.c
+
 do_test: $(TESTS:%=test/%.cmp)
 
 .PRECIOUS: test/%.s test/% test/%.res test/%.ans test/%.cmp
