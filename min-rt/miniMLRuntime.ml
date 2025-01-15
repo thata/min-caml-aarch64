@@ -1,5 +1,5 @@
-let print_byte x = Pervasives.print_char (char_of_int x)
-let prerr_byte x = Pervasives.prerr_char (char_of_int x)
+let print_byte x = Stdlib.print_char (char_of_int x)
+let prerr_byte x = Stdlib.prerr_char (char_of_int x)
 
 let buf = Buffer.create 16
 
@@ -19,7 +19,7 @@ let rec read_token in_token =
     End_of_file ->
       if in_token then () else raise End_of_file
 
-let read_float () = 
+let read_float () =
   Buffer.clear buf;
   read_token false;
   try
@@ -27,7 +27,7 @@ let read_float () =
   with
     Failure _ -> failwith ((Buffer.contents buf) ^ ": float conversion failed.")
 
-let read_int () = 
+let read_int () =
   Buffer.clear buf;
   read_token false;
   try
